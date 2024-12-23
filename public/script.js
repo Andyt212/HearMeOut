@@ -181,14 +181,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             button.querySelector('.progress').textContent = '';
                         });
                         
-                        // Clear comments with fade
+                        // Clear comments
                         const commentsContainer = document.getElementById('commentsContainer');
                         if (commentsContainer) {
-                            commentsContainer.style.opacity = '0';
-                            setTimeout(() => {
-                                commentsContainer.innerHTML = '';
-                                commentsContainer.style.opacity = '1';
-                            }, 500);
+                            commentsContainer.innerHTML = '';
                         }
                         
                         // Clear comment input
