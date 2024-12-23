@@ -181,10 +181,14 @@ document.addEventListener('DOMContentLoaded', () => {
                             button.querySelector('.progress').textContent = '';
                         });
                         
-                        // Clear comments
+                        // Clear comments with fade
                         const commentsContainer = document.getElementById('commentsContainer');
                         if (commentsContainer) {
-                            commentsContainer.innerHTML = '';
+                            commentsContainer.style.opacity = '0';
+                            setTimeout(() => {
+                                commentsContainer.innerHTML = '';
+                                commentsContainer.style.opacity = '1';
+                            }, 500);
                         }
                         
                         // Clear comment input
@@ -278,3 +282,22 @@ function loadCommentsForCharacter(characterName) {
         })
         .catch(error => console.error('Error loading comments:', error));
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const unmuteButton = document.getElementById('unmuteButton');
+    const backgroundMusic = document.getElementById('backgroundMusic');
+    let isMuted = true;
+
+    unmuteButton.addEventListener('click', () => {
+        if (isMuted) {
+            // Reset the song to the beginning when unmuting
+            backgroundMusic.currentTime = 0;
+            backgroundMusic.play();
+            unmuteButton.textContent = '🔊'; // Unmuted emoji
+        } else {
+            backgroundMusic.pause();
+            unmuteButton.textContent = '🔇'; // Muted emoji
+        }
+        isMuted = !isMuted;
+    });
+});
