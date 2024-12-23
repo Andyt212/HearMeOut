@@ -212,6 +212,7 @@ try {
         });
     }
 
+
     // Add these endpoints for handling comments
     app.post('/api/comments', (req, res) => {
         const { characterName, comment } = req.body;
