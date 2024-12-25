@@ -13,6 +13,24 @@ function initApp() {
     const characterNameElement = document.getElementById('characterName');
     const showNameElement = document.getElementById('showName');
     
+    // Reset progress bars on initial load
+    if (yesButton) {
+        const yesProgress = yesButton.querySelector('.progress');
+        if (yesProgress) {
+            yesProgress.style.width = '0%';
+            yesProgress.textContent = '';
+            yesProgress.style.backgroundColor = 'transparent';
+        }
+    }
+    if (noButton) {
+        const noProgress = noButton.querySelector('.progress');
+        if (noProgress) {
+            noProgress.style.width = '0%';
+            noProgress.textContent = '';
+            noProgress.style.backgroundColor = 'transparent';
+        }
+    }
+
     // Debug logs for DOM elements
     console.log('Yes button found:', !!yesButton);
     console.log('No button found:', !!noButton);
@@ -46,7 +64,6 @@ function updateCharacterDisplay(index) {
         if (characterNameElement) characterNameElement.textContent = character.name;
         if (showNameElement) showNameElement.textContent = character.show;
         
-        // Load comments for this character
         loadCommentsForCharacter(character.name);
     }
 }
@@ -56,39 +73,24 @@ function nextCharacter() {
     
     currentCharacterIndex++;
     
-    // Check if we've reached the end
     if (currentCharacterIndex >= globalCharacters.length) {
-        // Hide the buttons
+        // Hide the voting interface
         const buttonContainer = document.querySelector('.button-container');
-        if (buttonContainer) {
-            buttonContainer.style.display = 'none';
-        }
-        
-        // Hide the image
         const imageElement = document.querySelector('.Hear-Me-Out');
-        if (imageElement) {
-            imageElement.style.display = 'none';
-        }
-
-        // Hide character name and show name
         const characterNameElement = document.getElementById('characterName');
         const showNameElement = document.getElementById('showName');
+        
+        if (buttonContainer) buttonContainer.style.display = 'none';
+        if (imageElement) imageElement.style.display = 'none';
         if (characterNameElement) characterNameElement.style.display = 'none';
         if (showNameElement) showNameElement.style.display = 'none';
         
-        // Create and show end message
+        // Show end message
         const endMessage = document.createElement('div');
+        endMessage.textContent = "That's all for now! Check back later for more.";
         endMessage.style.textAlign = 'center';
         endMessage.style.marginTop = '20px';
-        endMessage.style.fontFamily = 'Neue Montreal, sans-serif';
-        endMessage.style.fontSize = '2rem';
-        endMessage.textContent = "That's all for now! Check back later for more.";
-        
-        // Insert the message after the image
-        const centerImageContainer = document.querySelector('.center-image-container');
-        if (centerImageContainer) {
-            centerImageContainer.appendChild(endMessage);
-        }
+        document.querySelector('.center-image-container').appendChild(endMessage);
         
         return;
     }
@@ -141,8 +143,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const noButton = document.getElementById('noButton');
         yesButton.disabled = true;
         noButton.disabled = true;
+
+        // Immediately hide the button text
+        const yesButtonText = yesButton.querySelector('.button-text');
+        const noButtonText = noButton.querySelector('.button-text');
+        yesButtonText.style.opacity = '0';
+        noButtonText.style.opacity = '0';
         
-        // Send vote to server
         fetch('/api/vote', {
             method: 'POST',
             headers: {
@@ -155,58 +162,46 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(response => response.json())
         .then(data => {
-            // Get the updated percentages
-            fetch(`/api/percentages/${encodeURIComponent(currentCharacter.name)}`)
-                .then(response => response.json())
-                .then(percentages => {
-                    // Hide the button text
-                    yesButton.querySelector('.button-text').style.display = 'none';
-                    noButton.querySelector('.button-text').style.display = 'none';
-
-                    // Update the progress bars and show percentages
-                    yesButton.querySelector('.progress').style.width = `${percentages.upvotePercentage}%`;
-                    noButton.querySelector('.progress').style.width = `${percentages.downvotePercentage}%`;
+            if (data.success) {
+                // Update progress bars with new percentages
+                yesButton.querySelector('.progress').style.width = `${data.percentages.upvotePercentage}%`;
+                noButton.querySelector('.progress').style.width = `${data.percentages.downvotePercentage}%`;
+                
+                yesButton.querySelector('.progress').textContent = `${Math.round(data.percentages.upvotePercentage)}%`;
+                noButton.querySelector('.progress').textContent = `${Math.round(data.percentages.downvotePercentage)}%`;
+                
+                // Move to next character after delay
+                setTimeout(() => {
+                    // Reset buttons
+                    yesButton.disabled = false;
+                    noButton.disabled = false;
                     
-                    // Add percentage text
-                    yesButton.querySelector('.progress').textContent = `${Math.round(percentages.upvotePercentage)}%`;
-                    noButton.querySelector('.progress').textContent = `${Math.round(percentages.downvotePercentage)}%`;
+                    // Reset progress bars
+                    yesButton.querySelector('.progress').style.width = '0%';
+                    noButton.querySelector('.progress').style.width = '0%';
+                    yesButton.querySelector('.progress').textContent = '';
+                    noButton.querySelector('.progress').textContent = '';
                     
-                    // Move to next character after delay
-                    setTimeout(() => {
-                        // Reset buttons
-                        [yesButton, noButton].forEach(button => {
-                            button.disabled = false;
-                            button.querySelector('.button-text').style.display = 'block';
-                            button.querySelector('.progress').style.width = '0%';
-                            button.querySelector('.progress').textContent = '';
-                        });
-                        
-                        // Clear comments
-                        const commentsContainer = document.getElementById('commentsContainer');
-                        if (commentsContainer) {
-                            commentsContainer.innerHTML = '';
-                        }
-                        
-                        // Clear comment input
-                        const commentInput = document.getElementById('commentInput');
-                        if (commentInput) {
-                            commentInput.value = '';
-                        }
-                        
-                        nextCharacter();
-                    }, 2000);
-                });
+                    // Show button text again with a fade in effect
+                    yesButtonText.style.opacity = '1';
+                    noButtonText.style.opacity = '1';
+                    
+                    nextCharacter();
+                }, 2000);
+            }
         })
         .catch(error => {
             console.error('Error submitting vote:', error);
-            // Re-enable buttons if there's an error
+            // Re-enable buttons and show text if there's an error
             yesButton.disabled = false;
             noButton.disabled = false;
+            yesButtonText.style.opacity = '1';
+            noButtonText.style.opacity = '1';
         });
     }
     
-    yesButton.addEventListener('click', () => handleVote(true));
-    noButton.addEventListener('click', () => handleVote(false));
+    if (yesButton) yesButton.addEventListener('click', () => handleVote(true));
+    if (noButton) noButton.addEventListener('click', () => handleVote(false));
 });
 
 document.addEventListener('DOMContentLoaded', () => {

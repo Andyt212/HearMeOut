@@ -66,35 +66,45 @@ body {
     left: 0;
     top: 0;
     height: 100%;
-    width: 0%;
-    background-color: rgba(255, 255, 255, 0.3);
-    transition: width 0.3s ease;
+    width: 0;
+    background-color: transparent; /* Start with transparent background */
+    transition: width 0.3s ease, background-color 0.3s ease;
     
     /* Center the percentage text */
     display: flex;
-    align-items: center;     /* Vertical center */
-    justify-content: center; /* Horizontal center */
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 10px;
     
     /* Text styling */
     font-family: 'Neue Montreal', sans-serif;
     color: white;
-    font-size: 1.2rem;  /* Adjust size as needed */
+    font-size: 1.2rem;
     
     /* Ensure text is above the background */
     z-index: 2;
 }
 
-.choice-button .button-text {
-    position: relative;
-    z-index: 2;
+/* Only show colored backgrounds when width is greater than 0 */
+.choice-button.absolutely .progress[style*="width: 0"] {
+    background-color: transparent;
 }
 
-.choice-button.absolutely .progress {
+.choice-button.absolutely .progress:not([style*="width: 0"]) {
     background-color: #a5e8ac;
 }
 
-.choice-button.absolutely-not .progress {
+.choice-button.absolutely-not .progress[style*="width: 0"] {
+    background-color: transparent;
+}
+
+.choice-button.absolutely-not .progress:not([style*="width: 0"]) {
     background-color: #e75a7c;
+}
+
+.choice-button .button-text {
+    position: relative;
+    z-index: 2;
 }
 
 .choice-button:hover {
@@ -273,4 +283,8 @@ body {
 
 .unmute-button .material-icons {
     font-size: 24px;
+}
+
+.button-text {
+    transition: opacity 0.3s ease;
 }
