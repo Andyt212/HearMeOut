@@ -4,6 +4,7 @@ body {
     margin: 0;  /* Remove default margin */
     padding: 20px;
     text-align: center;
+    background-color: #f2f5ea;
     
     /* Center vertically and horizontally */
     position: absolute;
@@ -15,9 +16,9 @@ body {
 }   
 
 h1 {
-    color: #333;
+    color: #2c363f;
     margin-bottom: 30px;
-    font-family: 'Neue Montreal';
+    font-family: 'Neue Montreal', Bold;
     font-weight: bold;
 }
 
@@ -38,10 +39,11 @@ input[type="file"] {
     padding: 8px;
     border: 1px solid #ddd;
     border-radius: 4px;
+    background-color: white;
 }
 
 button {
-    background-color: #4CAF50;
+    background-color: #bbc7a4;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -50,7 +52,7 @@ button {
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #b0bb9a;
 }
 
 
@@ -59,14 +61,14 @@ button:hover {
     top: 20px;
     left: 20px;
     padding: 10px 20px;
-    background-color: #363abe;
+    background-color: #2c363f;
     color: white;
     text-decoration: none;
     border-radius: 5px;
 }
 
 .back-button:hover {
-    background-color: #0006c1;
+    background-color: #212930;
 }
 
 .image-preview {

@@ -196,6 +196,12 @@ body {
     transform: translateX(calc(100% + 20px));
 }
 
+.comments-section h3 {
+    color: #2c363f; /* Change this to any color you want */
+    font-family: 'Neue Montreal', Bold; /* Optional: match your site's font */
+    margin-bottom: 10px;
+}
+
 .comment-form {
     margin-bottom: 15px;
 }
@@ -224,6 +230,10 @@ body {
     border-radius: 4px;
     cursor: pointer;
     margin-top: 5px;
+}
+
+#submitComment:hover {
+    background-color: #b0bb9a;
 }
 
 .comment {
