@@ -85,11 +85,10 @@ function nextCharacter() {
         if (characterNameElement) characterNameElement.style.display = 'none';
         if (showNameElement) showNameElement.style.display = 'none';
         
-        // Show end message
+        // Show styled end message with line break
         const endMessage = document.createElement('div');
-        endMessage.textContent = "That's all for now! Check back later for more.";
-        endMessage.style.textAlign = 'center';
-        endMessage.style.marginTop = '20px';
+        endMessage.className = 'end-message';
+        endMessage.innerHTML = "That's all for now!<br>Check back later for more.";
         document.querySelector('.center-image-container').appendChild(endMessage);
         
         return;
@@ -300,5 +299,26 @@ document.addEventListener('DOMContentLoaded', () => {
             unmuteButton.textContent = '🔇'; // Muted emoji
         }
         isMuted = !isMuted;
+    });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const toggleButton = document.getElementById('toggleComments');
+    const commentsSection = document.querySelector('.comments-section');
+    let isHidden = true;
+
+    if (!toggleButton || !commentsSection) {
+        console.error('Required elements not found!');
+        return;
+    }
+
+    // Set initial button text to match hidden state
+    toggleButton.textContent = '🕮';
+
+    toggleButton.addEventListener('click', () => {
+        isHidden = !isHidden;
+        commentsSection.classList.toggle('hidden', isHidden);
+        toggleButton.textContent = isHidden ? '🕮' : '✕';
+        console.log('Toggle clicked, isHidden:', isHidden);
     });
 });
