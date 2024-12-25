@@ -41,13 +41,14 @@ body {
     transition: background-color 0.3s ease;
     position: relative;
     overflow: hidden;
+    z-index: 1;
 }
 
 .percentage-display {
     position: absolute;
     left: 0;
     top: 0;
-    width: 100% !important; /* Force full width */
+    width: 100% !important;
     height: 100%;
     display: flex;
     align-items: center;
@@ -67,8 +68,9 @@ body {
     top: 0;
     height: 100%;
     width: 0;
-    background-color: transparent; /* Start with transparent background */
+    background-color: transparent;
     transition: width 0.3s ease, background-color 0.3s ease;
+    z-index: 2;
     
     /* Center the percentage text */
     display: flex;
@@ -85,20 +87,17 @@ body {
     z-index: 2;
 }
 
-/* Only show colored backgrounds when width is greater than 0 */
-.choice-button.absolutely .progress[style*="width: 0"] {
-    background-color: transparent;
+/* Add this new rule to hide background when width is 0 */
+.progress[style*="width: 0%"] {
+    background-color: transparent !important;
 }
 
-.choice-button.absolutely .progress:not([style*="width: 0"]) {
+/* Only show colored backgrounds when width is greater than 0 */
+.choice-button.absolutely .progress {
     background-color: #a5e8ac;
 }
 
-.choice-button.absolutely-not .progress[style*="width: 0"] {
-    background-color: transparent;
-}
-
-.choice-button.absolutely-not .progress:not([style*="width: 0"]) {
+.choice-button.absolutely-not .progress {
     background-color: #e75a7c;
 }
 

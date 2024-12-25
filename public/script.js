@@ -144,6 +144,10 @@ document.addEventListener('DOMContentLoaded', () => {
         yesButton.disabled = true;
         noButton.disabled = true;
 
+        // Get progress elements
+        const yesProgress = yesButton.querySelector('.progress');
+        const noProgress = noButton.querySelector('.progress');
+
         // Immediately hide the button text
         const yesButtonText = yesButton.querySelector('.button-text');
         const noButtonText = noButton.querySelector('.button-text');
@@ -163,12 +167,16 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
+                // Ensure progress bars have their background colors
+                yesProgress.style.backgroundColor = '#a5e8ac';
+                noProgress.style.backgroundColor = '#e75a7c';
+
                 // Update progress bars with new percentages
-                yesButton.querySelector('.progress').style.width = `${data.percentages.upvotePercentage}%`;
-                noButton.querySelector('.progress').style.width = `${data.percentages.downvotePercentage}%`;
+                yesProgress.style.width = `${data.percentages.upvotePercentage}%`;
+                noProgress.style.width = `${data.percentages.downvotePercentage}%`;
                 
-                yesButton.querySelector('.progress').textContent = `${Math.round(data.percentages.upvotePercentage)}%`;
-                noButton.querySelector('.progress').textContent = `${Math.round(data.percentages.downvotePercentage)}%`;
+                yesProgress.textContent = `${Math.round(data.percentages.upvotePercentage)}%`;
+                noProgress.textContent = `${Math.round(data.percentages.downvotePercentage)}%`;
                 
                 // Move to next character after delay
                 setTimeout(() => {
@@ -177,10 +185,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     noButton.disabled = false;
                     
                     // Reset progress bars
-                    yesButton.querySelector('.progress').style.width = '0%';
-                    noButton.querySelector('.progress').style.width = '0%';
-                    yesButton.querySelector('.progress').textContent = '';
-                    noButton.querySelector('.progress').textContent = '';
+                    yesProgress.style.width = '0%';
+                    noProgress.style.width = '0%';
+                    yesProgress.textContent = '';
+                    noProgress.textContent = '';
+                    yesProgress.style.backgroundColor = 'transparent';
+                    noProgress.style.backgroundColor = 'transparent';
                     
                     // Show button text again with a fade in effect
                     yesButtonText.style.opacity = '1';
