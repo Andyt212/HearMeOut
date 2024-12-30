@@ -1,1 +1,1 @@
-INSERT INTO characters (name, show, image_url) VALUES ('Mothra', 'Godzilla', 'images/mothra.jpeg')
+INSERT INTO characters (name, show, image_url) VALUES ('Ron Weaseley', 'Harry Potter', 'images/ron.webp')
